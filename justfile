@@ -5,6 +5,7 @@ nix-release-url := quote(
     / "nix-" + nix-version
     / "nix-" + nix-version + "-" + system + ".tar.xz"
 )
+nix-config-path := env("HOME") / ".config" / "nix"
 has-nix := path_exists("/nix")
 
 # list recipes
@@ -14,12 +15,21 @@ default:
 # print the url of the nix release to install
 nix-release:
   @echo {{nix-release-url}}
-  echo "'/nix' exists: {{has-nix}}"
+  @echo "'/nix' exists: {{has-nix}}"
+
+# init local nix config
+nix-init-config:
+  @mkdir -p {{nix-config-path}}
+  @cp --update=none "./config/nix/nix.conf" {{nix-config-path}}
 
 # install nix
-nix-install:
+nix-install: nix-init-config
   cd $(mktemp -d) \
     && curl -LO {{nix-release-url}} \
     && tar xJf "nix-{{nix-version}}-{{system}}.tar.xz" \
     && cd "nix-{{nix-version}}-{{system}}" \
     && ./install --daemon
+
+# enter ros dev shell
+shell:
+  @nix develop
