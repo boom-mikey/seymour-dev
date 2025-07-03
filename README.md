@@ -8,6 +8,10 @@ in memory of [seymour papert](https://en.wikipedia.org/wiki/Seymour_Papert)
 ## dependencies
 
 * linux
+* [curl](https://github.com/curl/curl)
+* [just](https://github.com/casey/just)
+
+
 * a [recent version of docker](https://docs.docker.com/engine/install/ubuntu/)
 * make (`$ sudo apt install build-essential`)
 
