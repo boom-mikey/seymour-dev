@@ -2,7 +2,7 @@
   description = "testing ros on nix";
   inputs = {
     flake-utils.url = "github:numtide/flake-utils";
-    ros-flake.url = "github:lopsided98/nix-ros-overlay";
+    ros-flake.url = "github:lopsided98/nix-ros-overlay/develop";
   };
 
   outputs = { self, nixpkgs, flake-utils, ros-flake }:
@@ -12,24 +12,10 @@
       in
       {
         devShell = pkgs.mkShell {
-          nativeBuildInputs = [
-            (buildEnv {
-              paths = [
-                ros-core
-                colcon
-                geometry-msgs
-                turtlebot4-desktop
-                turtlebot4-simulator
-                slam-toolbox
-                nav2-minimal-tb4-sim
-                nav2-minimal-tb3-sim
-                # rqt metapackages
-                rqt-common-plugins
-                rqt-tf-tree
-                tf2-tools
-              ];
-            })
-          ];
+          buildInputs = [ ros.turtlesim
+                          ros.ros2run
+                          ros.rmw-fastrtps-dynamic-cpp ];
+          RMW_IMPLEMENTATION = "rmw_fastrtps_dynamic_cpp";
         };
       }
     );
